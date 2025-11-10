@@ -1,7 +1,6 @@
-
-
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Microsoft.Maui.Controls;
 
 namespace Counter
@@ -20,10 +19,6 @@ namespace Counter
 
             CounterLabel.Text = value.ToString();
             Title = counterName;
-
-            PlusButton.Clicked += AddBtn_Clicked;
-            MinusButton.Clicked += SubstractBtn_Clicked;
-            BackButton.Clicked += ReturnBtn_Clicked;
         }
 
         private async void AddBtn_Clicked(object sender, EventArgs e)
@@ -45,19 +40,21 @@ namespace Counter
             await Navigation.PopAsync();
         }
 
-       
-        private async System.Threading.Tasks.Task UpdateCounterValue()
+        private async Task UpdateCounterValue()
         {
             try
             {
                 string path = Path.Combine(FileSystem.AppDataDirectory, "counters.txt");
+
                 if (!File.Exists(path))
                     return;
 
                 var lines = await File.ReadAllLinesAsync(path);
+
                 for (int i = 0; i < lines.Length; i++)
                 {
                     var parts = lines[i].Split(';');
+
                     if (parts.Length == 2 && parts[0] == counterName)
                     {
                         lines[i] = $"{counterName};{value}";

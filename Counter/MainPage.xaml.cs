@@ -1,4 +1,10 @@
-﻿
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
+
 namespace Counter
 {
     public partial class MainPage : ContentPage
@@ -8,10 +14,8 @@ namespace Counter
         public MainPage()
         {
             InitializeComponent();
-            AddCounterButton.Clicked += AddCounterButton_Clicked;
-            _ = LoadCountersFromFile();
-            a();
 
+            _ = LoadCountersFromFile();
         }
 
         private async void AddCounterButton_Clicked(object sender, EventArgs e)
@@ -22,12 +26,14 @@ namespace Counter
                 return;
 
             counters.Add((name, 0));
+
             await SaveCountersToFile();
-            RenderCountersOnScreen();
+            ListCounter();
+
             await Navigation.PushAsync(new CounterPage(name, 0));
         }
 
-        private void RenderCountersOnScreen()
+        private void ListCounter()
         {
             CountersHeader.Children.Clear();
 
@@ -35,7 +41,7 @@ namespace Counter
             {
                 var button = new Button
                 {
-                    Text = $"{c.Name} ({c.Value})",
+                    Text = c.Name,   
                     CornerRadius = 8,
                     BackgroundColor = Colors.LightGray,
                     FontSize = 14
@@ -50,12 +56,14 @@ namespace Counter
             }
         }
 
-        private async System.Threading.Tasks.Task SaveCountersToFile()
+        private async Task SaveCountersToFile()
         {
             try
             {
                 string path = Path.Combine(FileSystem.AppDataDirectory, "counters.txt");
+
                 var lines = counters.Select(c => $"{c.Name};{c.Value}");
+
                 await File.WriteAllLinesAsync(path, lines);
             }
             catch (Exception ex)
@@ -64,40 +72,33 @@ namespace Counter
             }
         }
 
-        private async System.Threading.Tasks.Task LoadCountersFromFile()
+        private async Task LoadCountersFromFile()
         {
             try
             {
                 string path = Path.Combine(FileSystem.AppDataDirectory, "counters.txt");
+
                 if (!File.Exists(path))
                     return;
 
                 var lines = await File.ReadAllLinesAsync(path);
+
                 counters.Clear();
 
                 foreach (var line in lines)
                 {
                     var parts = line.Split(';');
+
                     if (parts.Length == 2 && int.TryParse(parts[1], out int value))
                         counters.Add((parts[0], value));
                 }
 
-                RenderCountersOnScreen();
+                ListCounter();
             }
             catch (Exception ex)
             {
                 await DisplayAlert("Błąd wczytywania", ex.Message, "OK");
             }
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            _ = LoadCountersFromFile();
-        }
-        private async void a()
-        {
-            await DisplayAlert("Ścieżka do pliku", FileSystem.AppDataDirectory, "OK");
         }
     }
 }

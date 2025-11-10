@@ -14,7 +14,8 @@
                 HorizontalOptions="Start"
                 BackgroundColor="#CCCCCC"
                 TextColor="Black"
-                CornerRadius="6"/>
+                CornerRadius="6"
+                Clicked="ReturnBtn_Clicked"/>
 
         <Label x:Name="CounterLabel"
                Text="0"
@@ -31,7 +32,8 @@
                     FontSize="24"
                     BackgroundColor="#FF6666"
                     TextColor="White"
-                    CornerRadius="30"/>
+                    CornerRadius="30"
+                    Clicked="SubstractBtn_Clicked"/>
             <Button x:Name="PlusButton"
                     Text="+"
                     WidthRequest="60"
@@ -39,7 +41,8 @@
                     FontSize="24"
                     BackgroundColor="#66CC66"
                     TextColor="White"
-                    CornerRadius="30"/>
+                    CornerRadius="30"
+                    Clicked="AddBtn_Clicked"/>
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

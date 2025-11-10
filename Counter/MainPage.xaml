@@ -20,7 +20,8 @@
                 HorizontalOptions="Center"
                 BackgroundColor="#007AFF"
                 TextColor="White"
-                CornerRadius="8" />
+                CornerRadius="8"
+                Clicked="AddCounterButton_Clicked"/>
 
     </VerticalStackLayout>
 </ContentPage>
