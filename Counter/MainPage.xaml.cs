@@ -14,7 +14,6 @@ namespace Counter
         public MainPage()
         {
             InitializeComponent();
-
             _ = LoadCountersFromFile();
         }
 
